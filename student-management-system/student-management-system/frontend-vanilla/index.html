@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AcademiaX — Modern Student Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+
+<style>
+/* ==========================================================================
+   ACADEMIAX DESIGN SYSTEM & CSS VARIABLES
+   ========================================================================== */
+:root {
+  /* Color Palette - Dark Theme (Default) */
+  --bg-main: #0b0f19;
+  --bg-surface: #111827;
+  --bg-surface-elevated: #1f2937;
+  --bg-surface-hover: #374151;
+  --bg-glass: rgba(17, 24, 39, 0.75);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-color-light: rgba(255, 255, 255, 0.05);
+
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+
+  /* Brand Accents */
+  --accent-primary: #6366f1; /* Indigo */
+  --accent-primary-hover: #4f46e5;
+  --accent-glow: rgba(99, 102, 241, 0.3);
+  --accent-secondary: #8b5cf6; /* Violet */
+  --accent-cyan: #06b6d4;
+
+  /* State Colors */
+  --color-success: #10b981;
+  --color-success-bg: rgba(16, 185, 129, 0.12);
+  --color-warning: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.12);
+  --color-danger: #ef4444;
+  --color-danger-bg: rgba(239, 68, 68, 0.15);
+  --color-info: #3b82f6;
+
+  /* Course Tag Colors */
+  --course-cse: #6366f1;
+  --course-ece: #06b6d4;
+  --course-mech: #f59e0b;
+  --course-civil: #10b981;
+  --course-eee: #8b5cf6;
+  --course-it: #ec4899;
+  --course-other: #6b7280;
+
+  /* Typography */
+  --font-heading: 'Outfit', -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+
+  /* Layout & Shadows */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
+  --shadow-glow: 0 0 20px var(--accent-glow);
+}
+
+[data-theme="light"] {
+  --bg-main: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #f1f5f9;
+  --bg-surface-hover: #e2e8f0;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-color-light: rgba(0, 0, 0, 0.04);
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+  --shadow-glow: 0 0 16px rgba(99, 102, 241, 0.15);
+}
+
+/* ==========================================================================
+   RESET & CORE STYLES
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-main); }
+::-webkit-scrollbar-thumb { background: var(--bg-surface-elevated); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 18px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: #ffffff;
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+.btn-primary:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+.btn-secondary {
+  background: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+.btn-secondary:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--text-muted);
+}
+
+.btn-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+.btn-danger:hover {
+  background: var(--color-danger);
+  color: #ffffff;
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+.btn-icon:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface-hover);
+}
+
+/* Inputs & Form Elements */
+.input, .select, .textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: all 0.2s ease;
+}
+.input:focus, .select:focus, .textarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background: var(--bg-surface);
+}
+.input--error, .select--error {
+  border-color: var(--color-danger) !important;
+  box-shadow: 0 0 0 3px var(--color-danger-bg) !important;
+}
+
+/* Badges & Pills */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  border-radius: var(--radius-full);
+}
+.badge-cse { background: rgba(99, 102, 241, 0.18); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
+.badge-ece { background: rgba(6, 182, 212, 0.18); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
+.badge-mech { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+.badge-civil { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+.badge-eee { background: rgba(139, 92, 246, 0.18); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); }
+.badge-it { background: rgba(236, 72, 153, 0.18); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
+.badge-other { background: rgba(107, 114, 128, 0.18); color: #9ca3af; border: 1px solid rgba(107, 114, 128, 0.3); }
+
+/* Connection Status Indicator */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface-elevated);
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.status-dot.online { background: var(--color-success); box-shadow: 0 0 8px var(--color-success); }
+.status-dot.offline { background: var(--color-warning); box-shadow: 0 0 8px var(--color-warning); }
+
+/* ==========================================================================
+   LAYOUT COMPONENTS
+   ========================================================================== */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-glass);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  display: grid;
+  place-items: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #ffffff;
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+.brand-name {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff, var(--text-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .brand-name {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-tabs {
+  display: flex;
+  background: var(--bg-surface-elevated);
+  padding: 4px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  gap: 2px;
+}
+.nav-tab {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.nav-tab:hover { color: var(--text-primary); }
+.nav-tab.active {
+  color: #ffffff;
+  background: var(--accent-primary);
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* MAIN CONTAINER */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+}
+
+/* ==========================================================================
+   VIEW 1: DASHBOARD & ANALYTICS
+   ========================================================================== */
+.view-section { display: none; }
+.view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+}
+
+.stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.stat-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.stat-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--accent-primary);
+}
+
+.stat-value {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.stat-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.trend-up { color: var(--color-success); font-weight: 600; }
+
+.charts-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.chart-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+.chart-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Custom CSS Bar Chart for Department Breakdown */
+.chart-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 10px;
+}
+.bar-item {
+  display: grid;
+  grid-template-columns: 100px 1fr 45px;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.85rem;
+}
+.bar-label { font-weight: 600; color: var(--text-secondary); }
+.bar-track {
+  height: 10px;
+  background: var(--bg-surface-elevated);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bar-count { font-weight: 700; color: var(--text-primary); text-align: right; }
+
+/* Quick Activity Feed */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-elevated);
+  font-size: 0.85rem;
+}
+.activity-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+.activity-info { flex: 1; min-width: 0; }
+.activity-name { font-weight: 600; color: var(--text-primary); }
+.activity-time { font-size: 0.75rem; color: var(--text-muted); }
+
+/* ==========================================================================
+   VIEW 2: STUDENT ROSTER & DATA GRID
+   ========================================================================== */
+.toolbar-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.search-box .input {
+  padding-left: 40px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.batch-actions {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--bg-surface-elevated);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--accent-primary);
+}
+.batch-actions.active { display: flex; animation: fadeIn 0.2s; }
+.batch-count { font-size: 0.85rem; font-weight: 700; color: var(--accent-primary); }
+
+/* Table Styling */
+.table-container {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.table th {
+  padding: 14px 18px;
+  background: var(--bg-surface-elevated);
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-color);
+}
+.table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color-light);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+.table tbody tr {
+  transition: background-color 0.15s ease;
+}
+.table tbody tr:hover {
+  background: var(--bg-surface-hover);
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #ffffff;
+  flex-shrink: 0;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+.user-info { display: flex; flex-direction: column; }
+.user-name { font-weight: 700; color: var(--text-primary); cursor: pointer; }
+.user-name:hover { color: var(--accent-primary); text-decoration: underline; }
+.user-email { font-size: 0.8rem; color: var(--text-muted); }
+
+.actions-cell {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Grid Card View Option */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.student-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.student-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-md);
+}
+
+/* Empty State */
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  background: var(--bg-surface);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+}
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+.empty-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.empty-desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin: 0 auto 20px;
+}
+
+/* ==========================================================================
+   VIEW 3: DEPARTMENTS & COURSES
+   ========================================================================== */
+.dept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.dept-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+.dept-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.dept-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+/* ==========================================================================
+   VIEW 4: API SANDBOX & TESTER
+   ========================================================================== */
+.api-console-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.console-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.code-block {
+  background: #050811;
+  color: #a7f3d0;
+  font-family: monospace;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  overflow-x: auto;
+  border: 1px solid rgba(255,255,255,0.05);
+  min-height: 220px;
+  white-space: pre-wrap;
+}
+
+/* ==========================================================================
+   MODALS & SLIDE-OVER PANELS
+   ========================================================================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 50;
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Drawer Panel (Right Side) */
+.drawer {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: min(480px, 100vw);
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  z-index: 60;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+.drawer.active {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.drawer-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.drawer-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.drawer-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background: var(--bg-surface-elevated);
+}
+
+/* Modal Dialog (Centered) */
+.modal {
+  margin: auto;
+  width: min(520px, calc(100vw - 32px));
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.95);
+  transition: transform 0.25s ease;
+}
+.overlay.active .modal {
+  transform: scale(1);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.form-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+.form-error {
+  font-size: 0.78rem;
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.88rem;
+  font-weight: 600;
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 280px;
+}
+.toast-success { border-left: 4px solid var(--color-success); }
+.toast-error { border-left: 4px solid var(--color-danger); }
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .app-header { flex-direction: column; align-items: stretch; gap: 12px; }
+  .nav-tabs { overflow-x: auto; justify-content: flex-start; }
+  .charts-row, .api-console-grid { grid-template-columns: 1fr; }
+  .toolbar-card { flex-direction: column; align-items: stretch; }
+  .form-row { grid-template-columns: 1fr; }
+  .table-container { overflow-x: auto; }
+  .table th, .table td { padding: 10px 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ==========================================================================
+     TOP NAVIGATION HEADER
+     ========================================================================== -->
+<header class="app-header">
+  <a href="#" class="brand">
+    <div class="brand-logo">AX</div>
+    <div>
+      <h1 class="brand-name">AcademiaX</h1>
+    </div>
+  </a>
+
+  <!-- Navigation Tabs -->
+  <nav class="nav-tabs">
+    <button class="nav-tab active" data-view="dashboard">
+      <span>📊</span> Dashboard
+    </button>
+    <button class="nav-tab" data-view="roster">
+      <span>🎓</span> Student Roster
+    </button>
+    <button class="nav-tab" data-view="departments">
+      <span>🏛️</span> Departments
+    </button>
+    <button class="nav-tab" data-view="api-sandbox">
+      <span>⚡</span> API Console
+    </button>
+  </nav>
+
+  <!-- Connection Status & Theme Controls -->
+  <div class="header-actions">
+    <div class="status-pill" id="statusPill" title="Click to toggle connection mode">
+      <span class="status-dot online" id="statusDot"></span>
+      <span id="statusText">Django API</span>
+    </div>
+
+    <button class="btn-icon" id="themeToggle" title="Toggle Light/Dark Theme">
+      <span id="themeIcon">🌙</span>
+    </button>
+
+    <button class="btn btn-primary" id="openAddModalBtn">
+      <span>+</span> Add Student
+    </button>
+  </div>
+</header>
+
+<!-- ==========================================================================
+     MAIN CONTENT AREA
+     ========================================================================== -->
+<main class="container">
+
+  <!-- ==========================================================================
+       VIEW 1: DASHBOARD & ANALYTICS
+       ========================================================================== -->
+  <section id="dashboard" class="view-section active">
+    <!-- Stat KPI Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Total Enrolled</span>
+          <div class="stat-icon">🎓</div>
+        </div>
+        <div class="stat-value" id="kpiTotalStudents">0</div>
+        <div class="stat-subtitle"><span class="trend-up">↑ 12%</span> vs last semester</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Active Departments</span>
+          <div class="stat-icon">🏛️</div>
+        </div>
+        <div class="stat-value" id="kpiTotalDepartments">7</div>
+        <div class="stat-subtitle">CSE, ECE, MECH, CIVIL, EEE, IT, OTHER</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Avg Student Age</span>
+          <div class="stat-icon">⏳</div>
+        </div>
+        <div class="stat-value" id="kpiAvgAge">--</div>
+        <div class="stat-subtitle">Compliant (Minimum 15 yrs)</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Backend Status</span>
+          <div class="stat-icon">⚡</div>
+        </div>
+        <div class="stat-value" style="font-size:1.4rem;" id="kpiMode">REST API</div>
+        <div class="stat-subtitle" id="kpiModeSub">Connected to port 8000</div>
+      </div>
+    </div>
+
+    <!-- Charts & Analytics Section -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>Department Distribution Breakdown <span>📊</span></h3>
+        <div class="chart-bars" id="deptChartBars">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Recent Roster Activity <span>⏱️</span></h3>
+        <div class="activity-list" id="activityList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       VIEW 2: STUDENT ROSTER & DATA GRID
+       ========================================================================== -->
+  <section id="roster" class="view-section">
+    <!-- Search & Toolbar -->
+    <div class="toolbar-card">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="search" class="input" id="searchInput" placeholder="Search students by name, email, or course..." />
+      </div>
+
+      <div class="filter-group">
+        <select class="select" id="courseFilter" style="width: 190px;">
+          <option value="">All Departments</option>
+          <option value="CSE">Computer Science (CSE)</option>
+          <option value="ECE">Electronics (ECE)</option>
+          <option value="MECH">Mechanical (MECH)</option>
+          <option value="CIVIL">Civil Engineering</option>
+          <option value="EEE">Electrical (EEE)</option>
+          <option value="IT">Information Tech (IT)</option>
+          <option value="OTHER">Other Courses</option>
+        </select>
+
+        <select class="select" id="sortSelect" style="width: 150px;">
+          <option value="name_asc">Name (A-Z)</option>
+          <option value="name_desc">Name (Z-A)</option>
+          <option value="date_desc">Newest First</option>
+          <option value="date_asc">Oldest First</option>
+        </select>
+
+        <!-- Batch Operations -->
+        <div class="batch-actions" id="batchActions">
+          <span class="batch-count" id="batchCount">0 selected</span>
+          <button class="btn btn-secondary" id="exportBatchBtn" style="padding:4px 10px; font-size:0.78rem;">📥 Export CSV</button>
+          <button class="btn btn-danger" id="deleteBatchBtn" style="padding:4px 10px; font-size:0.78rem;">🗑️ Delete</button>
+        </div>
+
+        <button class="btn btn-secondary" id="exportAllBtn" title="Export full list to CSV">
+          📥 Export CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Data Table Container -->
+    <div class="table-container" id="tableContainer">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width: 40px;"><input type="checkbox" id="selectAllCheckbox" /></th>
+            <th>Student Name & Email</th>
+            <th>Phone</th>
+            <th>Department / Course</th>
+            <th>Date of Birth</th>
+            <th>Enrollment Date</th>
+            <th style="text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentTableBody">
+          <!-- Dynamic student rows -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="empty-icon">📂</div>
+      <h3 class="empty-title">No Students Found</h3>
+      <p class="empty-desc" id="emptyDesc">No student records match your active search or filter criteria.</p>
+      <button class="btn btn-primary" id="emptyAddBtn">+ Add New Student</button>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       VIEW 3: DEPARTMENTS & COURSES OVERVIEW
+       ========================================================================== -->
+  <section id="departments" class="view-section">
+    <div class="dept-grid" id="deptGrid">
+      <!-- Generated dynamically by JS -->
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       VIEW 4: API SANDBOX & TEST CONSOLE
+       ========================================================================== -->
+  <section id="api-sandbox" class="view-section">
+    <div class="api-console-grid">
+      <div class="console-box">
+        <h3 style="font-family: var(--font-heading);">REST API Endpoint Tester</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">
+          Send real HTTP requests directly to the Django REST Framework backend (`http://127.0.0.1:8000/api/students/`).
+        </p>
+
+        <div class="form-group">
+          <label class="form-label">HTTP Method & Path</label>
+          <div style="display: flex; gap: 8px;">
+            <select class="select" id="apiMethod" style="width: 110px;">
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+              <option value="PATCH">PATCH</option>
+              <option value="DELETE">DELETE</option>
+            </select>
+            <input type="text" class="input" id="apiEndpoint" value="/students/" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">JSON Request Body (For POST / PATCH)</label>
+          <textarea class="textarea" id="apiPayload" rows="6">{
+  "first_name": "Asha",
+  "last_name": "Rao",
+  "email": "asha.rao@example.com",
+  "phone": "+919876543210",
+  "date_of_birth": "2003-05-14",
+  "course": "CSE",
+  "address": "Chennai"
+}</textarea>
+        </div>
+
+        <button class="btn btn-primary" id="runApiTestBtn">🚀 Execute Request</button>
+      </div>
+
+      <div class="console-box">
+        <h3 style="font-family: var(--font-heading);">Response Output</h3>
+        <div style="display: flex; gap: 12px; font-size: 0.85rem; font-weight: 700;">
+          <span>Status: <span id="apiStatus" style="color: var(--color-success);">--</span></span>
+        </div>
+        <div class="code-block" id="apiResponse">/* Click 'Execute Request' to see raw response output */</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==========================================================================
+     SLIDE-OVER DRAWER: ADD / EDIT STUDENT
+     ========================================================================== -->
+<div class="overlay" id="drawerOverlay">
+  <aside class="drawer" id="studentDrawer">
+    <div class="drawer-header">
+      <h2 class="drawer-title" id="drawerTitle">Add Student Record</h2>
+      <button class="btn-icon" id="closeDrawerBtn">✕</button>
+    </div>
+
+    <form class="drawer-body" id="studentForm" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name *</label>
+          <input type="text" class="input" name="first_name" placeholder="e.g. Asha" required />
+          <span class="form-error" data-error="first_name"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name *</label>
+          <input type="text" class="input" name="last_name" placeholder="e.g. Rao" required />
+          <span class="form-error" data-error="last_name"></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <input type="email" class="input" name="email" placeholder="asha.rao@example.com" required />
+        <span class="form-error" data-error="email"></span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Phone Number *</label>
+          <input type="tel" class="input" name="phone" placeholder="+919876543210" required />
+          <span class="form-error" data-error="phone"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date of Birth *</label>
+          <input type="date" class="input" name="date_of_birth" required />
+          <span class="form-error" data-error="date_of_birth"></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Enrolled Department / Course *</label>
+        <select class="select" name="course" required>
+          <option value="CSE">Computer Science Engineering (CSE)</option>
+          <option value="ECE">Electronics & Communication (ECE)</option>
+          <option value="MECH">Mechanical Engineering (MECH)</option>
+          <option value="CIVIL">Civil Engineering (CIVIL)</option>
+          <option value="EEE">Electrical & Electronics (EEE)</option>
+          <option value="IT">Information Technology (IT)</option>
+          <option value="OTHER">Other / General</option>
+        </select>
+        <span class="form-error" data-error="course"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Residential Address</label>
+        <textarea class="textarea" name="address" rows="3" placeholder="Enter full address details..."></textarea>
+      </div>
+
+      <div class="drawer-footer">
+        <button type="button" class="btn btn-secondary" id="cancelFormBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="saveStudentBtn">Save Record</button>
+      </div>
+    </form>
+  </aside>
+</div>
+
+<!-- ==========================================================================
+     STUDENT PROFILE MODAL VIEW
+     ========================================================================== -->
+<div class="overlay" id="profileOverlay">
+  <div class="modal" style="max-width: 580px;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 20px;">
+      <div style="display:flex; gap:16px; align-items:center;">
+        <div class="user-avatar" id="profileAvatar" style="width: 56px; height: 56px; font-size: 1.4rem;">AR</div>
+        <div>
+          <h2 style="font-family:var(--font-heading); font-size:1.4rem;" id="profileName">Asha Rao</h2>
+          <span class="badge badge-cse" id="profileBadge">CSE</span>
+        </div>
+      </div>
+      <button class="btn-icon" id="closeProfileBtn">✕</button>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom: 20px; font-size:0.88rem;">
+      <div style="background:var(--bg-surface-elevated); padding:14px; border-radius:var(--radius-md);">
+        <div style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; font-weight:700;">Email</div>
+        <div style="font-weight:600;" id="profileEmail">asha.rao@example.com</div>
+      </div>
+      <div style="background:var(--bg-surface-elevated); padding:14px; border-radius:var(--radius-md);">
+        <div style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; font-weight:700;">Phone</div>
+        <div style="font-weight:600;" id="profilePhone">+919876543210</div>
+      </div>
+      <div style="background:var(--bg-surface-elevated); padding:14px; border-radius:var(--radius-md);">
+        <div style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; font-weight:700;">Date of Birth</div>
+        <div style="font-weight:600;" id="profileDob">2003-05-14 (Age 23)</div>
+      </div>
+      <div style="background:var(--bg-surface-elevated); padding:14px; border-radius:var(--radius-md);">
+        <div style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; font-weight:700;">Enrollment Date</div>
+        <div style="font-weight:600;" id="profileEnrollment">2026-09-17</div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg-surface-elevated); padding:14px; border-radius:var(--radius-md); margin-bottom: 20px; font-size:0.88rem;">
+      <div style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; font-weight:700; margin-bottom:4px;">Address</div>
+      <div style="font-weight:600;" id="profileAddress">Chennai, Tamil Nadu, India</div>
+    </div>
+
+    <div style="display:flex; justify-content:flex-end; gap:10px;">
+      <button class="btn btn-secondary" id="editProfileBtn">✏️ Edit Details</button>
+      <button class="btn btn-danger" id="deleteProfileBtn">🗑️ Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     CONFIRMATION DELETE DIALOG
+     ========================================================================== -->
+<div class="overlay" id="dialogOverlay">
+  <div class="modal">
+    <h3 style="font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 8px;">Confirm Delete Action</h3>
+    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;" id="dialogMessage">
+      Are you sure you want to delete this student record? This action cannot be undone.
+    </p>
+    <div style="display: flex; justify-content: flex-end; gap: 12px;">
+      <button class="btn btn-secondary" id="dialogCancelBtn">Cancel</button>
+      <button class="btn btn-danger" id="dialogConfirmBtn">Delete Permanently</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notifications Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ==========================================================================
+     JAVASCRIPT LOGIC
+     ========================================================================== -->
+<script>
+/* --- CONSTANTS & DATA DEFAULTS --- */
+const API_BASE = "http://127.0.0.1:8000/api";
+const COURSE_LABELS = {
+  CSE: "Computer Science Engineering",
+  ECE: "Electronics & Communication",
+  MECH: "Mechanical Engineering",
+  CIVIL: "Civil Engineering",
+  EEE: "Electrical & Electronics",
+  IT: "Information Technology",
+  OTHER: "Other Courses"
+};
+
+const COURSE_BADGES = {
+  CSE: "badge-cse", ECE: "badge-ece", MECH: "badge-mech",
+  CIVIL: "badge-civil", EEE: "badge-eee", IT: "badge-it", OTHER: "badge-other"
+};
+
+const AVATAR_COLORS = [
+  "linear-gradient(135deg, #6366f1, #8b5cf6)",
+  "linear-gradient(135deg, #06b6d4, #3b82f6)",
+  "linear-gradient(135deg, #f59e0b, #ef4444)",
+  "linear-gradient(135deg, #10b981, #059669)",
+  "linear-gradient(135deg, #ec4899, #8b5cf6)"
+];
+
+const SAMPLE_STUDENTS = [
+  { id: 1, first_name: "Asha", last_name: "Rao", email: "asha.rao@example.com", phone: "+919876543210", date_of_birth: "2003-05-14", course: "CSE", enrollment_date: "2026-09-10", address: "Chennai, TN" },
+  { id: 2, first_name: "Rahul", last_name: "Sharma", email: "rahul.sharma@example.com", phone: "+919812345678", date_of_birth: "2002-11-20", course: "ECE", enrollment_date: "2026-09-12", address: "Bangalore, KA" },
+  { id: 3, first_name: "Priya", last_name: "Patel", email: "priya.patel@example.com", phone: "+919711223344", date_of_birth: "2004-01-15", course: "IT", enrollment_date: "2026-09-14", address: "Mumbai, MH" },
+  { id: 4, first_name: "Vikram", last_name: "Malhotra", email: "vikram.m@example.com", phone: "+919544332211", date_of_birth: "2001-08-05", course: "MECH", enrollment_date: "2026-09-15", address: "Delhi, DL" },
+  { id: 5, first_name: "Ananya", last_name: "Deshmukh", email: "ananya.d@example.com", phone: "+919633221100", date_of_birth: "2003-03-30", course: "CIVIL", enrollment_date: "2026-09-16", address: "Pune, MH" }
+];
+
+/* --- STATE MANAGEMENT --- */
+let students = [];
+let selectedStudentIds = new Set();
+let editingStudentId = null;
+let viewStudentId = null;
+let pendingDeleteAction = null; // function
+let isUsingLocalMode = false;
+
+/* --- DOM ELEMENTS --- */
+const el = (id) => document.getElementById(id);
+
+/* --- INITIALIZATION --- */
+document.addEventListener("DOMContentLoaded", () => {
+  initTheme();
+  setupNavigation();
+  setupEventListeners();
+  loadData();
+});
+
+/* --- THEME TOGGLE --- */
+function initTheme() {
+  const saved = localStorage.getItem("academiax_theme") || "dark";
+  document.documentElement.setAttribute("data-theme", saved);
+  el("themeIcon").textContent = saved === "dark" ? "🌙" : "☀️";
+}
+
+el("themeToggle").addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("academiax_theme", next);
+  el("themeIcon").textContent = next === "dark" ? "🌙" : "☀️";
+});
+
+/* --- NAVIGATION TABS --- */
+function setupNavigation() {
+  document.querySelectorAll(".nav-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-section").forEach(v => v.classList.remove("active"));
+      tab.classList.add("active");
+      const viewId = tab.dataset.view;
+      el(viewId).classList.add("active");
+    });
+  });
+}
+
+/* --- API & DATA LAYER --- */
+async function loadData() {
+  try {
+    const res = await fetch(`${API_BASE}/students/`, { signal: AbortSignal.timeout(3000) });
+    if (!res.ok) throw new Error("Server responded with error");
+    const data = await res.json();
+    students = data.results ?? data;
+    isUsingLocalMode = false;
+    updateStatusPill(true);
+  } catch (err) {
+    console.warn("Django server offline or unreachable. Falling back to LocalStorage Demo Mode.");
+    isUsingLocalMode = true;
+    const local = localStorage.getItem("academiax_students");
+    if (local) {
+      students = JSON.parse(local);
+    } else {
+      students = [...SAMPLE_STUDENTS];
+      localStorage.setItem("academiax_students", JSON.stringify(students));
+    }
+    updateStatusPill(false);
+  }
+  renderAllViews();
+}
+
+function updateStatusPill(online) {
+  const dot = el("statusDot");
+  const text = el("statusText");
+  if (online) {
+    dot.className = "status-dot online";
+    text.textContent = "Django API Online";
+    el("kpiMode").textContent = "REST API";
+    el("kpiModeSub").textContent = "Connected port 8000";
+  } else {
+    dot.className = "status-dot offline";
+    text.textContent = "Demo Mode (Local Storage)";
+    el("kpiMode").textContent = "Local Storage";
+    el("kpiModeSub").textContent = "Offline Demo Mode";
+  }
+}
+
+el("statusPill").addEventListener("click", () => {
+  showToast("Re-checking backend connection...", "info");
+  loadData();
+});
+
+/* --- RENDER ALL VIEWS --- */
+function renderAllViews() {
+  renderDashboard();
+  renderRoster();
+  renderDepartments();
+}
+
+/* ==========================================================================
+   DASHBOARD RENDER
+   ========================================================================== */
+function renderDashboard() {
+  el("kpiTotalStudents").textContent = students.length;
+
+  // Calculate Avg Age
+  if (students.length > 0) {
+    const totalAge = students.reduce((acc, s) => {
+      if (!s.date_of_birth) return acc + 20;
+      const age = (new Date() - new Date(s.date_of_birth)) / (1000 * 60 * 60 * 24 * 365.25);
+      return acc + age;
+    }, 0);
+    el("kpiAvgAge").textContent = (totalAge / students.length).toFixed(1) + " yrs";
+  } else {
+    el("kpiAvgAge").textContent = "--";
+  }
+
+  // Department Bar Chart
+  const counts = { CSE: 0, ECE: 0, MECH: 0, CIVIL: 0, EEE: 0, IT: 0, OTHER: 0 };
+  students.forEach(s => {
+    if (counts[s.course] !== undefined) counts[s.course]++;
+    else counts.OTHER++;
+  });
+
+  const maxCount = Math.max(...Object.values(counts), 1);
+  const barsContainer = el("deptChartBars");
+  barsContainer.innerHTML = Object.entries(counts).map(([code, count]) => {
+    const pct = Math.round((count / maxCount) * 100);
+    return `
+      <div class="bar-item">
+        <span class="bar-label">${code}</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: ${pct}%; background: var(--course-${code.toLowerCase()});"></div>
+        </div>
+        <span class="bar-count">${count}</span>
+      </div>
+    `;
+  }).join("");
+
+  // Recent Activity Feed
+  const recent = [...students].slice(-4).reverse();
+  const actList = el("activityList");
+  if (recent.length === 0) {
+    actList.innerHTML = `<div style="color:var(--text-muted); font-size:0.85rem;">No recent activities.</div>`;
+  } else {
+    actList.innerHTML = recent.map(s => {
+      const initials = (s.first_name[0] + s.last_name[0]).toUpperCase();
+      return `
+        <div class="activity-item">
+          <div class="activity-avatar">${initials}</div>
+          <div class="activity-info">
+            <div class="activity-name">${escapeHtml(s.first_name)} ${escapeHtml(s.last_name)}</div>
+            <div class="activity-time">Enrolled in ${s.course} on ${s.enrollment_date || 'Today'}</div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+}
+
+/* ==========================================================================
+   ROSTER RENDER & FILTERING
+   ========================================================================== */
+function getFilteredStudents() {
+  const query = el("searchInput").value.trim().toLowerCase();
+  const course = el("courseFilter").value;
+  const sort = el("sortSelect").value;
+
+  let list = students.filter(s => {
+    const name = `${s.first_name} ${s.last_name}`.toLowerCase();
+    const matchQuery = !query || name.includes(query) || s.email.toLowerCase().includes(query) || s.course.toLowerCase().includes(query);
+    const matchCourse = !course || s.course === course;
+    return matchQuery && matchCourse;
+  });
+
+  if (sort === "name_asc") list.sort((a,b) => a.first_name.localeCompare(b.first_name));
+  else if (sort === "name_desc") list.sort((a,b) => b.first_name.localeCompare(a.first_name));
+  else if (sort === "date_desc") list.sort((a,b) => (b.id - a.id));
+  else if (sort === "date_asc") list.sort((a,b) => (a.id - b.id));
+
+  return list;
+}
+
+function renderRoster() {
+  const filtered = getFilteredStudents();
+  const tbody = el("studentTableBody");
+  const empty = el("emptyState");
+  const container = el("tableContainer");
+
+  if (filtered.length === 0) {
+    container.style.display = "none";
+    empty.style.display = "block";
+    return;
+  }
+
+  container.style.display = "block";
+  empty.style.display = "none";
+
+  tbody.innerHTML = filtered.map((s, idx) => {
+    const isChecked = selectedStudentIds.has(s.id);
+    const initials = (s.first_name[0] + s.last_name[0]).toUpperCase();
+    const bgGradient = AVATAR_COLORS[idx % AVATAR_COLORS.length];
+    const badgeClass = COURSE_BADGES[s.course] || "badge-other";
+
+    return `
+      <tr>
+        <td>
+          <input type="checkbox" class="row-checkbox" data-id="${s.id}" ${isChecked ? 'checked' : ''} />
+        </td>
+        <td>
+          <div class="user-cell">
+            <div class="user-avatar" style="background: ${bgGradient}">${initials}</div>
+            <div class="user-info">
+              <span class="user-name" onclick="openProfileModal(${s.id})">${escapeHtml(s.first_name)} ${escapeHtml(s.last_name)}</span>
+              <span class="user-email">${escapeHtml(s.email)}</span>
+            </div>
+          </div>
+        </td>
+        <td>${escapeHtml(s.phone)}</td>
+        <td>
+          <span class="badge ${badgeClass}">${s.course}</span>
+        </td>
+        <td>${s.date_of_birth}</td>
+        <td>${s.enrollment_date || '2026-09-17'}</td>
+        <td>
+          <div class="actions-cell">
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="openEditDrawer(${s.id})">Edit</button>
+            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem;" onclick="promptDeleteSingle(${s.id})">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  updateBatchActionBar();
+}
+
+/* ==========================================================================
+   DEPARTMENTS OVERVIEW RENDER
+   ========================================================================== */
+function renderDepartments() {
+  const grid = el("deptGrid");
+  const depts = [
+    { code: "CSE", name: "Computer Science Engineering", icon: "💻", color: "var(--course-cse)" },
+    { code: "ECE", name: "Electronics & Communication", icon: "📡", color: "var(--course-ece)" },
+    { code: "MECH", name: "Mechanical Engineering", icon: "⚙️", color: "var(--course-mech)" },
+    { code: "CIVIL", name: "Civil Engineering", icon: "🏗️", color: "var(--course-civil)" },
+    { code: "EEE", name: "Electrical & Electronics", icon: "⚡", color: "var(--course-eee)" },
+    { code: "IT", name: "Information Technology", icon: "🌐", color: "var(--course-it)" },
+    { code: "OTHER", name: "Other General Courses", icon: "📚", color: "var(--course-other)" }
+  ];
+
+  grid.innerHTML = depts.map(d => {
+    const count = students.filter(s => s.course === d.code).length;
+    return `
+      <div class="dept-card">
+        <div class="dept-icon" style="background: ${d.color}22; color: ${d.color};">${d.icon}</div>
+        <h3 style="font-family:var(--font-heading); font-size:1.15rem; margin-bottom:4px;">${d.name}</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:14px;">Code: ${d.code}</p>
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.9rem;">
+          <span style="font-weight:700;">${count} Enrolled Students</span>
+          <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.78rem;" onclick="filterByDept('${d.code}')">View Roster</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function filterByDept(code) {
+  el("courseFilter").value = code;
+  document.querySelector('[data-view="roster"]').click();
+  renderRoster();
+}
+
+/* ==========================================================================
+   BATCH SELECTION & OPERATIONS
+   ========================================================================== */
+function updateBatchActionBar() {
+  const bar = el("batchActions");
+  const countLabel = el("batchCount");
+  if (selectedStudentIds.size > 0) {
+    bar.classList.add("active");
+    countLabel.textContent = `${selectedStudentIds.size} selected`;
+  } else {
+    bar.classList.remove("active");
+  }
+}
+
+el("selectAllCheckbox").addEventListener("change", (e) => {
+  const filtered = getFilteredStudents();
+  if (e.target.checked) {
+    filtered.forEach(s => selectedStudentIds.add(s.id));
+  } else {
+    selectedStudentIds.clear();
+  }
+  renderRoster();
+});
+
+document.addEventListener("change", (e) => {
+  if (e.target.classList.contains("row-checkbox")) {
+    const id = Number(e.target.dataset.id);
+    if (e.target.checked) selectedStudentIds.add(id);
+    else selectedStudentIds.delete(id);
+    updateBatchActionBar();
+  }
+});
+
+/* CSV Export */
+function exportToCSV(dataList) {
+  if (dataList.length === 0) return showToast("No data to export", "error");
+  const headers = ["ID", "First Name", "Last Name", "Email", "Phone", "Date of Birth", "Course", "Enrollment Date"];
+  const rows = dataList.map(s => [s.id, s.first_name, s.last_name, s.email, s.phone, s.date_of_birth, s.course, s.enrollment_date || '']);
+  const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(r => r.map(x => `"${x}"`).join(","))].join("\n");
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `student_roster_${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast("Exported CSV successfully!", "success");
+}
+
+el("exportAllBtn").addEventListener("click", () => exportToCSV(students));
+el("exportBatchBtn").addEventListener("click", () => {
+  const batch = students.filter(s => selectedStudentIds.has(s.id));
+  exportToCSV(batch);
+});
+
+/* Batch Delete */
+el("deleteBatchBtn").addEventListener("click", () => {
+  openConfirmDialog(
+    `Permanently delete ${selectedStudentIds.size} selected student records?`,
+    async () => {
+      for (const id of Array.from(selectedStudentIds)) {
+        await executeDeleteStudent(id);
+      }
+      selectedStudentIds.clear();
+      showToast("Batch delete completed!", "success");
+      renderAllViews();
+    }
+  );
+});
+
+/* ==========================================================================
+   DRAWER / FORM LOGIC (ADD & EDIT)
+   ========================================================================== */
+function openAddDrawer() {
+  editingStudentId = null;
+  el("drawerTitle").textContent = "Add New Student Record";
+  el("studentForm").reset();
+  clearFormErrors();
+  el("drawerOverlay").classList.add("active");
+  el("studentDrawer").classList.add("active");
+}
+
+function openEditDrawer(id) {
+  const s = students.find(x => x.id === id);
+  if (!s) return;
+  editingStudentId = id;
+  el("drawerTitle").textContent = "Edit Student Record";
+  clearFormErrors();
+  const form = el("studentForm");
+  form.first_name.value = s.first_name;
+  form.last_name.value = s.last_name;
+  form.email.value = s.email;
+  form.phone.value = s.phone;
+  form.date_of_birth.value = s.date_of_birth;
+  form.course.value = s.course;
+  form.address.value = s.address || "";
+  el("drawerOverlay").classList.add("active");
+  el("studentDrawer").classList.add("active");
+}
+
+function closeDrawer() {
+  el("drawerOverlay").classList.remove("active");
+  el("studentDrawer").classList.remove("active");
+  editingStudentId = null;
+}
+
+el("openAddModalBtn").addEventListener("click", openAddDrawer);
+el("emptyAddBtn").addEventListener("click", openAddDrawer);
+el("closeDrawerBtn").addEventListener("click", closeDrawer);
+el("cancelFormBtn").addEventListener("click", closeDrawer);
+
+/* Form Validation */
+function validateForm(values) {
+  const errors = {};
+  if (!values.first_name.trim()) errors.first_name = "First name is required.";
+  if (!values.last_name.trim()) errors.last_name = "Last name is required.";
+  if (!values.email.trim()) errors.email = "Email address is required.";
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) errors.email = "Invalid email format.";
+
+  if (!values.phone.trim()) errors.phone = "Phone number is required.";
+  else if (!/^\+?[0-9]{7,15}$/.test(values.phone.trim())) errors.phone = "Must be 7-15 digits, optionally with '+'.";
+
+  if (!values.date_of_birth) {
+    errors.date_of_birth = "Date of birth is required.";
+  } else {
+    const dob = new Date(values.date_of_birth);
+    const age = (new Date() - dob) / (1000 * 60 * 60 * 24 * 365.25);
+    if (dob >= new Date()) errors.date_of_birth = "Date of birth must be in the past.";
+    else if (age < 15) errors.date_of_birth = "Student must be at least 15 years old.";
+  }
+  return errors;
+}
+
+function clearFormErrors() {
+  document.querySelectorAll(".form-error").forEach(e => e.textContent = "");
+  document.querySelectorAll(".input").forEach(i => i.classList.remove("input--error"));
+}
+
+function showFormErrors(errors) {
+  clearFormErrors();
+  for (const [field, msg] of Object.entries(errors)) {
+    const errEl = document.querySelector(`[data-error="${field}"]`);
+    const inputEl = document.querySelector(`[name="${field}"]`);
+    if (errEl) errEl.textContent = Array.isArray(msg) ? msg.join(" ") : msg;
+    if (inputEl) inputEl.classList.add("input--error");
+  }
+}
+
+el("studentForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const values = {
+    first_name: form.first_name.value.trim(),
+    last_name: form.last_name.value.trim(),
+    email: form.email.value.trim(),
+    phone: form.phone.value.trim(),
+    date_of_birth: form.date_of_birth.value,
+    course: form.course.value,
+    address: form.address.value.trim()
+  };
+
+  const errors = validateForm(values);
+  if (Object.keys(errors).length > 0) {
+    showFormErrors(errors);
+    return;
+  }
+
+  const saveBtn = el("saveStudentBtn");
+  saveBtn.disabled = true;
+
+  try {
+    if (!isUsingLocalMode) {
+      const url = editingStudentId ? `${API_BASE}/students/${editingStudentId}/` : `${API_BASE}/students/`;
+      const method = editingStudentId ? "PATCH" : "POST";
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showFormErrors(data);
+        saveBtn.disabled = false;
+        return;
+      }
+    } else {
+      // Local Storage Demo Handler
+      if (editingStudentId) {
+        const idx = students.findIndex(s => s.id === editingStudentId);
+        if (idx !== -1) students[idx] = { ...students[idx], ...values };
+      } else {
+        const newId = students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1;
+        students.push({ id: newId, ...values, enrollment_date: new Date().toISOString().slice(0,10) });
+      }
+      localStorage.setItem("academiax_students", JSON.stringify(students));
+    }
+
+    showToast(editingStudentId ? "Student record updated!" : "New student enrolled!", "success");
+    closeDrawer();
+    loadData();
+  } catch (err) {
+    showToast("Server connection error", "error");
+  } finally {
+    saveBtn.disabled = false;
+  }
+});
+
+/* ==========================================================================
+   DELETE HANDLER & CONFIRMATION DIALOG
+   ========================================================================== */
+function promptDeleteSingle(id) {
+  const s = students.find(x => x.id === id);
+  if (!s) return;
+  openConfirmDialog(
+    `Are you sure you want to delete ${s.first_name} ${s.last_name}'s record?`,
+    async () => {
+      await executeDeleteStudent(id);
+      showToast("Student deleted.", "success");
+      renderAllViews();
+    }
+  );
+}
+
+async function executeDeleteStudent(id) {
+  if (!isUsingLocalMode) {
+    try {
+      await fetch(`${API_BASE}/students/${id}/`, { method: "DELETE" });
+    } catch (_) {}
+  }
+  students = students.filter(s => s.id !== id);
+  selectedStudentIds.delete(id);
+  if (isUsingLocalMode) localStorage.setItem("academiax_students", JSON.stringify(students));
+}
+
+function openConfirmDialog(message, onConfirm) {
+  el("dialogMessage").textContent = message;
+  pendingDeleteAction = onConfirm;
+  el("dialogOverlay").classList.add("active");
+}
+
+el("dialogCancelBtn").addEventListener("click", () => {
+  el("dialogOverlay").classList.remove("active");
+  pendingDeleteAction = null;
+});
+
+el("dialogConfirmBtn").addEventListener("click", async () => {
+  if (pendingDeleteAction) await pendingDeleteAction();
+  el("dialogOverlay").classList.remove("active");
+  pendingDeleteAction = null;
+});
+
+/* ==========================================================================
+   STUDENT PROFILE MODAL
+   ========================================================================== */
+function openProfileModal(id) {
+  const s = students.find(x => x.id === id);
+  if (!s) return;
+  viewStudentId = id;
+  const initials = (s.first_name[0] + s.last_name[0]).toUpperCase();
+  el("profileAvatar").textContent = initials;
+  el("profileName").textContent = `${s.first_name} ${s.last_name}`;
+  el("profileBadge").textContent = s.course;
+  el("profileBadge").className = `badge ${COURSE_BADGES[s.course] || 'badge-other'}`;
+  el("profileEmail").textContent = s.email;
+  el("profilePhone").textContent = s.phone;
+  el("profileDob").textContent = s.date_of_birth;
+  el("profileEnrollment").textContent = s.enrollment_date || "2026-09-17";
+  el("profileAddress").textContent = s.address || "No address provided.";
+
+  el("profileOverlay").classList.add("active");
+}
+
+el("closeProfileBtn").addEventListener("click", () => el("profileOverlay").classList.remove("active"));
+el("editProfileBtn").addEventListener("click", () => {
+  el("profileOverlay").classList.remove("active");
+  if (viewStudentId) openEditDrawer(viewStudentId);
+});
+el("deleteProfileBtn").addEventListener("click", () => {
+  el("profileOverlay").classList.remove("active");
+  if (viewStudentId) promptDeleteSingle(viewStudentId);
+});
+
+/* ==========================================================================
+   API SANDBOX TESTER
+   ========================================================================== */
+el("runApiTestBtn").addEventListener("click", async () => {
+  const method = el("apiMethod").value;
+  const endpoint = el("apiEndpoint").value;
+  const payloadStr = el("apiPayload").value;
+  const responseBox = el("apiResponse");
+  const statusBox = el("apiStatus");
+
+  responseBox.textContent = "Executing HTTP request...";
+  statusBox.textContent = "--";
+
+  try {
+    const options = { method, headers: { "Content-Type": "application/json" } };
+    if (["POST", "PATCH"].includes(method)) {
+      options.body = payloadStr;
+    }
+    const res = await fetch(`${API_BASE}${endpoint}`, options);
+    statusBox.textContent = `${res.status} ${res.statusText}`;
+    statusBox.style.color = res.ok ? "var(--color-success)" : "var(--color-danger)";
+
+    let data;
+    try { data = await res.json(); } catch(_) { data = { message: "No JSON body returned" }; }
+    responseBox.textContent = JSON.stringify(data, null, 2);
+  } catch (err) {
+    statusBox.textContent = "Network Error";
+    statusBox.style.color = "var(--color-danger)";
+    responseBox.textContent = `Failed to connect to ${API_BASE}${endpoint}.\nEnsure Django backend server is running on port 8000.`;
+  }
+});
+
+/* ==========================================================================
+   TOAST SYSTEM
+   ========================================================================== */
+function showToast(msg, tone = "success") {
+  const container = el("toastContainer");
+  const toast = document.createElement("div");
+  toast.className = `toast toast-${tone}`;
+  toast.innerHTML = `<span>${tone === 'success' ? '✅' : tone === 'error' ? '❌' : 'ℹ️'}</span> ${escapeHtml(msg)}`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(100%)';
+    setTimeout(() => toast.remove(), 300);
+  }, 3200);
+}
+
+/* Helper function */
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+/* Event listeners for search & filter */
+el("searchInput").addEventListener("input", renderRoster);
+el("courseFilter").addEventListener("change", renderRoster);
+el("sortSelect").addEventListener("change", renderRoster);
+</script>
+</body>
+</html>
